@@ -13,13 +13,12 @@
 	
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:mybatis/config.xml" />
 	</bean>
-	
-	<bean id="MapperFactoryBean" class="org.mybatis.spring.mapper.MapperFactoryBean">
-  		<property name="mapperInterface" value="com.kh.spring.member.model.repository.MemberRepository" />
- 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
-	</bean>
-	
+
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>	
 	
 	
 	
