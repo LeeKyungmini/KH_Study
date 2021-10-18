@@ -154,6 +154,74 @@ public class MybatisTest {
 		session.selectList(NAMESPACE + "test04");
 	}
 	
+	@Test
+	public void dynamicIf() {
+		//사용자가 도서 검색필터에서 info를 선택하고 검색하면, 사용자가 입력한 키워드가 info에 포함된 도서 검색
+		//사용자가 도서 검색필터에 author를 선택하고 검색하면, 사용자가 입력한 키워드가 author에 포함된 도서 검색
+		//사용자가 선택한 필터 : info
+		//사용자가 입력한 키워드 : 김애란
+		
+		//session.selectList(NAMESPACE + "dynamicIf", Map.of("filter","info","keyword","김애란"));
+		session.selectList(NAMESPACE + "dynamicIf", Map.of("filter","author","keyword","김애란"));
+	}
+	
+	@Test
+	public void dynamicChoose() {
+		//사용자가 도서 검색필터에서 info를 선택하고 검색하면, 사용자가 입력한 키워드가 info에 포함된 도서 검색
+		//사용자가 도서 검색필터에 author를 선택하고 검색하면, 사용자가 입력한 키워드가 author에 포함된 도서 검색
+		//사용자가 별도의 필터를 선택하지 않을 경우 제목으로 검색
+		//사용자가 선택한 필터 : info
+		//사용자가 입력한 키워드 : 김애란
+		session.selectList(NAMESPACE + "dynamicChoose", Map.of("keyword","사랑"));
+	}
+	
+	@Test
+	public void dynamicForeachAndWhereTag() {
+		//사용자가 검색조건을 여러개 선택할 경우
+		//해당 조건들을 or연산하여 검색되는 도서를 반환
+		//사용자가, 제목, 내용, 작가 검색조건을 선택하고
+		//키워드에 '김애란'을 입력할 경우, 제목, 작가, 내용 중에서 하나라고 김애란이 조회되면 해당 도서 반환
+		String[] filters= {"title","author","info"};
+		session.selectList(NAMESPACE+"dynamicForeachAndWhereTag",Map.of("filters",filters,"keyword","김애란"));
+	}
+	@Test
+	public void test05() {
+		//사용자가 검색조건을 여러개 선택할 경우
+		//해당 조건들을 and 연산하여 검색되는 도서를 반환
+		//사용자가, 제목, 내용, 작가 검색조건을 선택하고
+		//키워드에 '김애란'을 입력할 경우, 제목, 작가, 내용 중에서 하나라고 김애란이 조회되면 해당 도서 반환
+		String[] filters= {"title","author","info"};
+		session.selectList(NAMESPACE+"test05",Map.of("filters",filters,"keyword","김애란"));
+	}
+	
+	@Test
+	public void dynamicForeachWithList() {
+		//사용자가 선택한 도서명 중에서 DB에 존재하는 도서를 모두 반환 
+		session.selectList(NAMESPACE + "dynamicForeachWithList", List.of("비행운", "남한산성", "오징어게임"));
+	}
+	
+	@Test
+	public void insertTemplate() {
+		//사용자로부터 데이터를 입력할
+		//테이블명, 컬럼명, 값을 전달받아 해당 테이블에 사용자가 원하는 데이터를 입력하는 쿼리
+		
+		session.insert(NAMESPACE + "insertTemplate"
+				, Map.of("tableName","book"
+						,"sec", Map.of("colName","bk_idx","val","sc_bk_idx.nextval")
+						,"data", Map.of("title","서블릿과 스프링의 차이","author","최범균")
+						)
+				);
+	}
+	
+	@Test
+	public void dynamicSet() {
+		Member member = new Member();
+		member.setUserId("DEV");
+		member.setEmail("AAAA@AAA.com");
+		member.setPassword("00009999");
+		session.update(NAMESPACE + "dynamicSet", member);
+	}
+	
 	
 	
 	
