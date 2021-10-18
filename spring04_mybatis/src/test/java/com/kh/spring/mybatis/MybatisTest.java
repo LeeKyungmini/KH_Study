@@ -1,5 +1,6 @@
 package com.kh.spring.mybatis;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,7 +43,7 @@ public class MybatisTest {
 		Member member = session.selectOne(NAMESPACE + "selectMemberByUserId", userId);
 		System.out.println(member);
 	}
-	
+
 	@Test
 	public void selectListAsMap() {
 		List<Map<String,Object>> res = session.selectList(NAMESPACE + "selectRentAndMemberByUserId", userId);
@@ -59,8 +60,44 @@ public class MybatisTest {
 		}
  	}
 	
+	@Test
+	public void insertWithDto() {
+		Member member = new Member();
+		member.setUserId("mybatis");
+		member.setPassword("abcdefg");
+		member.setEmail("pclass@kh.com");
+		member.setTell("010-0000-1111");
+
+		session.insert(NAMESPACE + "insertWithDto", member);
+	}
 	
+	@Test
+	public void insertWithMap() {
+		Member member = new Member();
+		member.setUserId("spring-easy");
+		
+		Map<String,Object> commandMap = new HashMap<String, Object>();
+		commandMap.put("member", member);
+		commandMap.put("title","세션과 일곱 쿠키들");
+		commandMap.put("rentBookCnt", 1);
+		
+		session.insert(NAMESPACE + "insertWithMap", commandMap);
+	}
 	
+	@Test
+	public void delete() {
+		session.delete(NAMESPACE + "delete", "spring-easy");
+	}
+	
+	//session.update
+	//사용자 아이디가 DEV인 회원을 찾아 비밀번호를 ppppp로 변경하시오
+	@Test
+	public void update() {
+		Member member = new Member();
+		member.setUserId("DEV");
+		member.setPassword("ppppp");
+		session.update(NAMESPACE + "update", member);
+	}
 	
 	
 	

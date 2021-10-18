@@ -4,7 +4,7 @@ import java.sql.Date;
 
 public class Member {
 	
-	 private String userId;
+	   private String userId;
 	   private String password;
 	   private String email;
 	   private String grade;
