@@ -28,6 +28,15 @@ public class MybatisTest {
 	//@Test : 테스트 메서드
 	//@After : 테스트 이후에 실행될 메서드
 	
+	//SqlSessionTemplate의 주요 메서드
+	//selectOne : 단일행 select문 실행
+	//selectList : 다중행 select문 실행
+	//insert : 메서드의 결과값은 쿼리에 의해 영향을 받는 row 수
+	//update : 메서드의 결과값은 쿼리에 의해 영향을 받는 row 수
+	//delete : 메서드의 결과값은 쿼리에 의해 영향을 받는 row 수
+	//** procedure 호출은 dml 쿼리메서드 중에서 선택
+	
+	
 	@Autowired
 	private SqlSessionTemplate session;
 	private final String NAMESPACE = "com.kh.spring.mybatis.MybatisMapper.";
@@ -99,7 +108,10 @@ public class MybatisTest {
 		session.update(NAMESPACE + "update", member);
 	}
 	
-	
+	@Test
+	public void procedure() {
+		session.update(NAMESPACE + "procedure", "100001");
+	}
 	
 	
 	

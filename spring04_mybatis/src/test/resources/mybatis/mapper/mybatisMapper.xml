@@ -58,7 +58,14 @@
 		update member set password = #{password} where user_id = #{userId}
 	</update>
 		
-		
+	<!-- 
+	마이바티스의 기본 statement 객체는 PreparedStatement 이다.
+	statementType 속성을 사용해 변경이 가능하다.
+	statement, prepared, callable
+	 -->	
+	<update id="procedure" statementType="CALLABLE">
+		{call sp_rent_extend(#{rbIdx, mode=IN})}
+	</update>	
 		
 		
 		
