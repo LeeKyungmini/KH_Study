@@ -113,9 +113,46 @@ public class MybatisTest {
 		session.update(NAMESPACE + "procedure", "100001");
 	}
 	
+	//mybatis mapper escape 처리
+	// <![CDATA[escape 처리할 내용]]>
+	// 비교연산자 escape
+	// &lt; &lt;= &gt; &gt;=
 	
+	//1. 도서명 : 쿠키와 세션,
+	//   작가 : 김영아
+	//   도서번호 : 시퀀스 사용인 도서를 BOOK 테이블에 저장하기
+	//   메서드 이름 : test01
 	
+	@Test
+	public void test01() {
+		session.insert(NAMESPACE + "test01", Map.of("title","쿠키와세션","author","김영아"));
+	}
 	
+	//2. 연장횟수가 2회 이상인 모든 대출도서 정보를
+	//   연장횟수 0회로 초기화 해주세요.
+	//   메서드 이름 : test02
+	
+	@Test
+	public void test02() {
+		int cnt = 0;
+		session.update(NAMESPACE + "test02", cnt);
+	}
+	
+	//3. 2021년 9월 이후 10월 이전 가입된 회원정보를 삭제 
+	//   메서드 이름 : test03
+	
+	@Test
+	public void test03() {
+		session.delete(NAMESPACE + "test03");
+	}
+	
+	//4. 대출 횟수가 가장 많은 3권의 도서를 조회
+	//   메서드 이름 : test04
+	
+	@Test
+	public void test04() {
+		session.selectList(NAMESPACE + "test04");
+	}
 	
 	
 	

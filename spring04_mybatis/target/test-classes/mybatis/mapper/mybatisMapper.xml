@@ -66,7 +66,27 @@
 	<update id="procedure" statementType="CALLABLE">
 		{call sp_rent_extend(#{rbIdx, mode=IN})}
 	</update>	
+	
+	<!-- Test -->
+	
+	<insert id="test01" statementType="CALLABLE">
+		insert into book(bk_idx, title, author)
+		values(sc_bk_idx.nextval, #{title}, #{author})
+	</insert>	
 		
+	<update id="test02">
+		update rent_book set extension_cnt = #{cnt} where extension_cnt &gt; 1
+	</update>	
 		
+	<delete id="test03">
+		delete from member where reg_date &gt; '2021/09/01' and &lt; '2021/10/01'
+	</delete>	
+		
+	<select id="test04" resultType="map">
+		select * from
+		(select * from book order by rent_cnt desc) 
+		where rownum &lt; 4
+	</select>	
+	
 		
 	</mapper>
