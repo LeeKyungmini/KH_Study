@@ -1,13 +1,10 @@
-package com.kh.spring.member.controller;
+package com.kh.spring.index.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.kh.spring.member.model.dto.Member;
-import com.kh.spring.member.model.service.MemberService;
+@Controller
+public class IndexController {
 
 	//1. @Controller : 해당 클래스를 applicationContext에 bean으로 등록
 	//				   Controller와 관련된 annotation을 사용할 수 있게 해준다.
@@ -30,21 +27,16 @@ import com.kh.spring.member.model.service.MemberService;
 	//13. Servlet객체를 컨트롤러의 매갭변수에 선언해 주입받을 수 있다.
 	//	  HttpServletRequest, HttpServletResponse, HttpSession
 	
-@Controller
-@RequestMapping("member")
-public class MemberController {
 	
-	@Autowired
-	private MemberService memberService;
-	
-	@GetMapping("join-form")
-	public void joinForm() {}
-	
-	@PostMapping("join")
-	public String join(Member member) {
-		memberService.insertMember(member);
+	@GetMapping("/")
+	public String index() {
+		
+		//Controller 메서드의 return타입
+		//void : 해당 메서드가 호출된 url의 경로와 같은 위치에 있는 jsp파일로 요청을 재지정
+		//		 요청 url : /index/index -> WEB-INF/views/index/index.jsp 
+		//String : 반환하는 값이jsp파일의 위치, return "index/index" -> WEB-INF/views/index/index.jsp 
+		//ModelAndView : Model객체 + view(jsp파일의 경로)
+		
 		return "index";
 	}
-	
-
 }
