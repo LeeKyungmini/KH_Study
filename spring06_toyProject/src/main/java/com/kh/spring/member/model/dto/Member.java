@@ -81,6 +81,7 @@ public class Member {
 	            + ", tell=" + tell + ", rentableDate=" + rentableDate + ", regDate=" + regDate + ", isLeave=" + isLeave
 	            + "]";
 	   }
+
 	   
 	   
 	}

@@ -1,11 +1,11 @@
 package com.kh.spring.member;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.Map;
+import javax.servlet.http.Cookie;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -81,13 +81,31 @@ public class MemberControllerTest {
 		mockMvc.perform(post("/member/login")
 				.param("userId","test")
 				.param("password","1234"))
+		.andExpect(status().is3xxRedirection())
+		.andDo(print());
+	}
+	
+	@Test
+	public void mypage() throws Exception{
+		Member member = new Member();
+		member.setUserId("testJson");
+		member.setPassword("1234");
+		member.setEmail("json@pclass.com");
+		member.setTell("010-0000-2222");
+		
+		mockMvc.perform(get("/member/mypage")
+				.cookie(new Cookie("JSESSIONID","12398712984178923"))
+				.sessionAttr("authentication", member))
 		.andExpect(status().isOk())
 		.andDo(print());
 	}
 	
-	
-	
-	
+	@Test
+	public void idCheck() throws Exception{
+		mockMvc.perform(get("/member/id-check?userId=test"))
+		.andExpect(status().isOk())
+		.andDo(print());
+	}
 	
 	
 	

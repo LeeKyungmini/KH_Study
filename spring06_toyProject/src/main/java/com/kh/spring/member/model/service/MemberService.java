@@ -26,5 +26,10 @@ public class MemberService {
 	public Member authenticateUser(Member member) {
 		return memberRepository.authenticateUser(member);
 	}
+
+
+	public Member selectMemberByUserId(String userId) {
+		return memberRepository.selectMemberByUserId(userId);
+	}
 	
 }

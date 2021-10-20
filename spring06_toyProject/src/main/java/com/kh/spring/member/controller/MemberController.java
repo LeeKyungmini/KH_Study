@@ -1,5 +1,6 @@
 package com.kh.spring.member.controller;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -11,7 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.util.CookieGenerator;
 
 import com.kh.spring.member.model.dto.Member;
 import com.kh.spring.member.model.service.MemberService;
@@ -79,9 +82,31 @@ public class MemberController {
 	}
 	
 	@GetMapping("mypage")
-	public void mypage(@CookieValue(name = "JSESSIONID") String sessionId
-					, @SessionAttribute(name = "authentication") Member member) {
+	public String mypage(@CookieValue(name = "JSESSIONID") String sessionId
+					, @SessionAttribute(name = "authentication") Member member
+					, HttpServletResponse response) {
+	
+		//Cookie 생성 및 응답헤더에 추가
+		CookieGenerator cookieGenerator = new CookieGenerator();
+		cookieGenerator.setCookieName("testCookie");
+		cookieGenerator.addCookie(response, "test_Cookie");
+		
 		logger.debug("@CookieValue : " + sessionId);
 		logger.debug("@SessionAttribute : " + member);
+		
+		return "member/mypage";
+	}
+	
+	@GetMapping("id-check")
+	@ResponseBody
+	public String idCheck(String userId) {
+		Member member = memberService.selectMemberByUserId(userId);
+		
+		if(member == null) {
+			return "available";
+		}else {
+			return "disable";
+		}
+		
 	}
 }
