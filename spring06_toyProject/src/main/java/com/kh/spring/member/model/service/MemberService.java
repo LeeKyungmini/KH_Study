@@ -22,5 +22,9 @@ public class MemberService {
 		memberRepository.insertMember(member);
 		
 	}
+
+	public Member authenticateUser(Member member) {
+		return memberRepository.authenticateUser(member);
+	}
 	
 }

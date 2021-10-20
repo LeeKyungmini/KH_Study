@@ -1,9 +1,14 @@
 package com.kh.spring.member.controller;
 
+import javax.servlet.http.HttpSession;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.kh.spring.member.model.dto.Member;
@@ -24,7 +29,7 @@ import com.kh.spring.member.model.service.MemberService;
 	//					application/x-www-form-urlEncoded를 지원하지 않는다.
 	//8. @RequestHeader : 요청 헤더를 메서드의 매개변수에 바인드
 	//9. @SessionAttribute : 원하는 session이 속성값을 매개변수에 바인드
-	//10. @CookieVariable : 원하는 cookie값을 매개변수에 바인드
+	//10. @CookieValue : 원하는 cookie값을 매개변수에 바인드
 	//11. @PathVariable : url 템플릿에 담긴 파라미터값을 매개변수에 바인드
 	//12. @ResponseBody : 메서드가 반환하는 값을 응답 body에 작성
 	//13. Servlet객체를 컨트롤러의 매갭변수에 선언해 주입받을 수 있다.
@@ -33,6 +38,8 @@ import com.kh.spring.member.model.service.MemberService;
 @Controller
 @RequestMapping("member")
 public class MemberController {
+	
+	Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
 	private MemberService memberService;
@@ -46,5 +53,31 @@ public class MemberController {
 		return "index";
 	}
 	
-
+	@PostMapping("join-json")
+	public String oinWithJson(@RequestBody Member member) {
+		logger.debug(member.toString());
+		return "index";
+	}
+	
+	//로그인 페이지 이동 메서드
+	//메서드명 : login
+	@GetMapping("login")
+	public void login() {
+	}
+	
+	//로그인 실행 메서드
+	//메서드명 : loginImpl
+	//재지정할 jsp : mypage
+	@PostMapping("login")
+	public String loginImpl(Member member, HttpSession session) {
+		Member certifiedUser = memberService.authenticateUser(member);
+		session.setAttribute("authentication", certifiedUser);
+		logger.debug(certifiedUser.toString());
+		return "redirect:/member/mypage";
+	}
+	
+	@GetMapping("mypage")
+	public void mypage() {
+		
+	}
 }
