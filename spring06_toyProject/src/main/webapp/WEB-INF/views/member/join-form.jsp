@@ -36,7 +36,7 @@ input[type=submit]{
 </head>
 <body>
 <h1>회원 가입 양식</h1>
-    <form:form modelAttribute="member"
+    <form:form modelAttribute="joinForm"
     	action="/member/join" method="post" id="frm_join">
      <table border="1">
         <tr>
@@ -66,7 +66,6 @@ input[type=submit]{
            <td>
            	  <input type="email" name="email" required/>
            </td>
-            <form:errors path="email" cssClass="valid-msg"/>
         </tr>
         <tr>
            <td colspan="2">
@@ -74,10 +73,12 @@ input[type=submit]{
            </td>
        </tr>
    </table>
-  </form:form>>
+  </form:form>
    
+<%-- 
+<script type="text/javascript" src="/resources/js/member/joinForm.js"></script> 
+--%>
 
-<script type="text/javascript" src="/resources/js/member/joinForm.js"></script>
 
  
 

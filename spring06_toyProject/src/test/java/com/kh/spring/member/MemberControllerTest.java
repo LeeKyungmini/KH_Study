@@ -47,7 +47,7 @@ public class MemberControllerTest {
 	@Test
 	public void joinTest() throws Exception {
 		mockMvc.perform(post("/member/join")
-			.param("userId", "testMethod")
+			.param("userId", "testMethod2")
 			.param("password", "1234")
 			.param("tell", "010-2222-3333")
 			.param("email", "aaa@gbb.com"))

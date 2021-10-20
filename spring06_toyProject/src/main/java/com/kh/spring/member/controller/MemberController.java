@@ -5,10 +5,13 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.Errors;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +21,8 @@ import org.springframework.web.util.CookieGenerator;
 
 import com.kh.spring.member.model.dto.Member;
 import com.kh.spring.member.model.service.MemberService;
+import com.kh.spring.member.validator.JoinForm;
+import com.kh.spring.member.validator.JoinFormValidator;
 
 	//1. @Controller : 해당 클래스를 applicationContext에 bean으로 등록
 	//				   Controller와 관련된 annotation을 사용할 수 있게 해준다.
@@ -46,15 +51,32 @@ public class MemberController {
 	
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	@Autowired
 	private MemberService memberService;
+	private JoinFormValidator joinFormValidator;
 	
+	public MemberController(MemberService memberService, JoinFormValidator joinFormValidator) {
+		super();
+		this.memberService = memberService;
+		this.joinFormValidator = joinFormValidator;
+	}
+	
+	@InitBinder(value = "joinForm")
+	public void initBinder(WebDataBinder webDataBinder) {
+		webDataBinder.addValidators(joinFormValidator);
+	}
+
 	@GetMapping("join-form")
 	public void joinForm() {}
 	
 	@PostMapping("join")
-	public String join(Member member) {
-		memberService.insertMember(member);
+	public String join(@Validated JoinForm form
+			, Errors errors //반드시 검증될 객체 바로 뒤에 작성
+			) {
+		
+		if(errors.hasErrors()) {
+			return "member/join-form";
+		}
+		memberService.insertMember(form);
 		return "index";
 	}
 	

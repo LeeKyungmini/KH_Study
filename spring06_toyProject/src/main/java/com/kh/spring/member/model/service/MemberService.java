@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.kh.spring.member.model.dto.Member;
 import com.kh.spring.member.model.repository.MemberRepository;
+import com.kh.spring.member.validator.JoinForm;
 
 @Service
 public class MemberService {
@@ -13,14 +14,8 @@ public class MemberService {
 	@Autowired
 	private MemberRepository memberRepository;
 	
-	@GetMapping("/member/join-form")
-	public void joinForm() {
-		
-	}
-
-	public void insertMember(Member member) {
-		memberRepository.insertMember(member);
-		
+	public void insertMember(JoinForm form) {
+		memberRepository.insertMember(form);
 	}
 
 	public Member authenticateUser(Member member) {
