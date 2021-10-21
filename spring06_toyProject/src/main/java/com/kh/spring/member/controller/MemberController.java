@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.CookieGenerator;
 
+import com.kh.spring.common.code.ErrorCode;
+import com.kh.spring.common.exception.HandlableException;
 import com.kh.spring.common.validator.ValidateResult;
 import com.kh.spring.member.model.dto.Member;
 import com.kh.spring.member.model.service.MemberService;
@@ -77,8 +79,8 @@ public class MemberController {
 
 	@GetMapping("join")
 	public void joinForm(Model model) {
-		model.addAttribute(new JoinForm());
-		model.addAttribute("error", new ValidateResult().getError());
+		model.addAttribute(new JoinForm()).addAttribute("error", new ValidateResult().getError());
+		//throw new HandlableException(ErrorCode.AUTHENTICATION_FAILED_ERROR);
 	}
 	
 	@PostMapping("join")
