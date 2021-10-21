@@ -34,7 +34,6 @@ public class MemberControllerTest {
 	Logger logger = LoggerFactory.getLogger(getClass());
 
 	//MockMVC : http 요청 및 응답 상황 테스트를 위한 객체
-	
 	@Autowired
 	WebApplicationContext wac;
 	MockMvc mockMvc;
@@ -106,8 +105,6 @@ public class MemberControllerTest {
 		.andExpect(status().isOk())
 		.andDo(print());
 	}
-	
-	
 	
 	
 	
