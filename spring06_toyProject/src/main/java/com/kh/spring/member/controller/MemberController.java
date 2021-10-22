@@ -1,5 +1,7 @@
 package com.kh.spring.member.controller;
 
+import java.util.UUID;
+
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -87,6 +89,8 @@ public class MemberController {
 	public String join(@Validated JoinForm form
 			, Errors errors //반드시 검증될 객체 바로 뒤에 작성
 			, Model model
+			, HttpSession session
+			, RedirectAttributes redirectAttr
 			) {
 		
 		ValidateResult vr = new ValidateResult();
@@ -97,8 +101,23 @@ public class MemberController {
 			return "member/join";
 		}
 		
-		memberService.insertMember(form);
-		return "index";
+		//token 생성
+		String token = UUID.randomUUID().toString();
+		session.setAttribute("persistUser", form);
+		session.setAttribute("persistToken ", token);
+		
+		memberService.authenticateByEmail(form, token);
+		redirectAttr.addFlashAttribute("message", "이메일이 발송되었습니다.");
+		
+		return "redirect:/";
+	}
+	
+	@GetMapping("joinimpl")
+	public String joinImpl() {
+		
+		//memberService.insertMember(form);
+		return "member/login";
+		
 	}
 	
 	@PostMapping("join-json")
