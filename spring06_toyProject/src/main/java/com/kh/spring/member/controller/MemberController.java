@@ -15,6 +15,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -104,7 +105,7 @@ public class MemberController {
 		//token 생성
 		String token = UUID.randomUUID().toString();
 		session.setAttribute("persistUser", form);
-		session.setAttribute("persistToken ", token);
+		session.setAttribute("persistToken", token);
 		
 		memberService.authenticateByEmail(form, token);
 		redirectAttr.addFlashAttribute("message", "이메일이 발송되었습니다.");
@@ -112,11 +113,22 @@ public class MemberController {
 		return "redirect:/";
 	}
 	
-	@GetMapping("joinimpl")
-	public String joinImpl() {
+	@GetMapping("join-impl/{token}")
+	public String joinImpl(@PathVariable String token
+							,@SessionAttribute(value = "persistToken", required = false) String persistToken
+							,@SessionAttribute(value = "persistUser", required = false) JoinForm form
+							,HttpSession session
+							,RedirectAttributes redirectAttrs) {
 		
-		//memberService.insertMember(form);
-		return "member/login";
+		if(!token.equals(persistToken)) {
+			throw new HandlableException(ErrorCode.AUTHENTICATION_FAILED_ERROR);
+		}
+		
+		memberService.insertMember(form);
+		redirectAttrs.addFlashAttribute("message", "회원가입을 환영합니다. 로그인해주세요");
+		session.removeAttribute("persistToken");
+		session.removeAttribute("persistUser");
+		return "redirect:/member/login";
 		
 	}
 	
@@ -151,8 +163,8 @@ public class MemberController {
 	}
 	
 	@GetMapping("mypage")
-	public String mypage(@CookieValue(name = "JSESSIONID") String sessionId
-					, @SessionAttribute(name = "authentication") Member member
+	public String mypage(@CookieValue(name = "JSESSIONID", required = false) String sessionId
+					, @SessionAttribute(name = "authentication", required = false) Member member
 					, HttpServletResponse response) {
 	
 		//Cookie 생성 및 응답헤더에 추가
