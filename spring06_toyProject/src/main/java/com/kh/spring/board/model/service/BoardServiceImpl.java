@@ -9,6 +9,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.spring.board.model.dto.Board;
 import com.kh.spring.board.model.repository.BoardRepository;
+import com.kh.spring.common.code.ErrorCode;
+import com.kh.spring.common.exception.HandlableException;
 import com.kh.spring.common.util.file.FileUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -26,5 +28,7 @@ public class BoardServiceImpl implements BoardService {
 		for (MultipartFile multipartFile : multiparts) {
 			boardRepository.insertFileInfo(util.fileUpload(multipartFile));
 		}
+		
+		throw new HandlableException(ErrorCode.AUTHENTICATION_FAILED_ERROR);
 	}
 }
