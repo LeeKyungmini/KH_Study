@@ -24,7 +24,6 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	
 	<interceptors>
 		<interceptor>
 			<mapping path="/**"/>
@@ -36,6 +35,35 @@
 	<beans:bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager" id="transactionManager">
 		<beans:constructor-arg name="dataSource" ref="dataSource"/>
 	</beans:bean>
+	
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<!-- 트랜잭션 처리에 사용할 메서드 네임패턴과 트랜잭션 정책 -->
+			<!-- 
+				isolation : 격리레벨, 데이터에 작업이 수행되고 있을 때 해당 데이터를 격리 시키는 수준
+					*** DEFAULT : 데이터베이스의 격리레벨을 따라감
+					*** READ_COMMITED : COMMIT이 끝난 데이터만 읽기를 허용
+					READ_UNCOMMITED : COMMIT이 끝나지 않은 데이터도 읽기를 허용
+					REPEATABLE_READ : SELECT문이 사용되는 데이터에 LOCK을 걸어 수정이 불가능하게 처리
+					SERIALIZABLE : SELECT문이 사용되는 데이터에 LOCK을 걸어 수정이 불가능하게 처리
+					
+				rollback-for : 어떤 예외가 발생했을 때 rollback 시킬지 지정
+				no-rollback-for : 어떤 예외가 발생했을 때 rollback 시키지 않을지 지정
+				propagation : 전파속성, 기존 트랜잭션 유무 여부에 따라 새로운 트랜잭션을 생성하는 정책
+					***REQUIRED : 이미 진행중인 트랜잭션이 있으면 해당 트랜잭션에 포함, 아니면 새로운 트랜잭션 생성
+					
+				
+				read-only : 읽기 전용, DML이 발생하면 에러 발생시킴
+				timeout : 작업에 수행되는 시간이 지정한 시간을 넘기면 rollback 처리
+			 -->
+			
+			<tx:method name="select*"/>
+			<tx:method name="insert*" isolation="DEFAULT"/>
+			<tx:method name="delete*" isolation="DEFAULT" propagation="REQUIRED"/>
+			<tx:method name="update*" isolation="DEFAULT"/>
+		</tx:attributes>
+	</tx:advice>
+	
 	<tx:annotation-driven/>	
 	
 	<context:component-scan base-package="com.kh.spring"/>
